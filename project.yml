@@ -1,0 +1,99 @@
+name: PlaneRadar
+
+options:
+  bundleIdPrefix: com.pholtom
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    # "Sign to Run Locally" — no Apple Developer account needed to build and run
+    # the menu-bar app. To ship the Notification Center widget later, switch the
+    # PlaneRadarWidget target to Automatic signing with your Team.
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGNING_REQUIRED: "NO"
+    CODE_SIGNING_ALLOWED: "YES"
+    ENABLE_HARDENED_RUNTIME: "NO"
+
+targets:
+
+  PlaneRadar:
+    type: application
+    platform: macOS
+    sources:
+      - path: PlaneRadarApp
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_NAME: PlaneRadar
+        PRODUCT_BUNDLE_IDENTIFIER: com.pholtom.PlaneRadar
+        INFOPLIST_FILE: PlaneRadarApp/Info.plist
+        CODE_SIGN_ENTITLEMENTS: PlaneRadarApp/PlaneRadar.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+    # The Notification Center widget is NOT embedded for now — the menu-bar app
+    # stands alone and needs no signing. To ship the widget, add back:
+    #   dependencies:
+    #     - target: PlaneRadarWidget
+    #       embed: true
+
+  # Kept for later — the Notification Center / desktop widget. Build the
+  # `PlaneRadarWidget` scheme explicitly; it needs a real Team + App Group.
+  PlaneRadarWidget:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: PlaneRadarWidget
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_NAME: PlaneRadarWidget
+        PRODUCT_BUNDLE_IDENTIFIER: com.pholtom.PlaneRadar.Widget
+        INFOPLIST_FILE: PlaneRadarWidget/Info.plist
+        CODE_SIGN_ENTITLEMENTS: PlaneRadarWidget/PlaneRadarWidget.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+        # Compiles without a Team; to actually load the widget, switch to
+        # CODE_SIGN_STYLE Automatic + your Team and set this back to YES.
+        CODE_SIGNING_ALLOWED: "NO"
+
+  # Dev-only: a plain window that renders the radar layouts against live data,
+  # so you can see the widget without signing / installing it.
+  PlaneRadarPreview:
+    type: application
+    platform: macOS
+    sources:
+      - path: Shared
+      - path: Preview/PreviewApp.swift
+      - path: PlaneRadarWidget/PlaneRadarWidget.swift
+      - path: PlaneRadarWidget/RadarWidgetView.swift
+    settings:
+      base:
+        PRODUCT_NAME: PlaneRadarPreview
+        PRODUCT_BUNDLE_IDENTIFIER: com.pholtom.PlaneRadar.Preview
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+
+schemes:
+  PlaneRadar:
+    build:
+      targets:
+        PlaneRadar: all
+    run:
+      config: Debug
+  PlaneRadarWidget:
+    build:
+      targets:
+        PlaneRadarWidget: all
+    run:
+      config: Debug
+  PlaneRadarPreview:
+    build:
+      targets:
+        PlaneRadarPreview: all
+    run:
+      config: Debug
