@@ -106,6 +106,15 @@ uncommon callsigns just show "Route not in database".
 Marker colours / altitude bands: `Shared/AircraftStyle.swift`.
 Rings, sweep, triangle size, labels: `Shared/RadarView.swift`.
 
+**App icon:** `PlaneRadarApp/Assets.xcassets/AppIcon.appiconset`. Regenerate the
+PNGs after editing the artwork in `Tools/make_icon.swift`:
+
+```bash
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
+  xcrun swiftc -parse-as-library -O -o /tmp/icongen Tools/make_icon.swift
+/tmp/icongen PlaneRadarApp/Assets.xcassets/AppIcon.appiconset
+```
+
 ## Manual project setup (no XcodeGen)
 
 1. New Xcode project → **macOS App** → name `PlaneRadar`, SwiftUI lifecycle.
@@ -133,6 +142,8 @@ PlaneRadarApp/               the menu-bar app
   PlaneRadarApp.swift          @main MenuBarExtra
   LocationManager.swift        CoreLocation
   MenuContentView.swift        the dropdown: radar dial + nearest flights
+  FlightDetailView.swift       per-flight detail + adsbdb route lookup
+  Assets.xcassets/AppIcon      the app icon
   Info.plist  PlaneRadar.entitlements
 PlaneRadarWidget/            parked — the Notification Center widget
   PlaneRadarWidgetBundle.swift  @main
@@ -140,6 +151,7 @@ PlaneRadarWidget/            parked — the Notification Center widget
   RadarWidgetView.swift         maps RadarEntry → the shared RadarDial
   Info.plist  PlaneRadarWidget.entitlements
 Preview/PreviewApp.swift     the side-by-side preview window
+Tools/make_icon.swift        renders the AppIcon PNGs
 project.yml   bootstrap.sh
 ```
 

@@ -36,6 +36,7 @@ targets:
         INFOPLIST_FILE: PlaneRadarApp/Info.plist
         CODE_SIGN_ENTITLEMENTS: PlaneRadarApp/PlaneRadar.entitlements
         GENERATE_INFOPLIST_FILE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     # The Notification Center widget is NOT embedded for now — the menu-bar app
     # stands alone and needs no signing. To ship the widget, add back:
     #   dependencies:
@@ -71,12 +72,14 @@ targets:
       - path: Preview/PreviewApp.swift
       - path: PlaneRadarWidget/PlaneRadarWidget.swift
       - path: PlaneRadarWidget/RadarWidgetView.swift
+      - path: PlaneRadarApp/Assets.xcassets
     settings:
       base:
         PRODUCT_NAME: PlaneRadarPreview
         PRODUCT_BUNDLE_IDENTIFIER: com.pholtom.PlaneRadar.Preview
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
 schemes:
   PlaneRadar:
